@@ -204,7 +204,7 @@ BO_ 148 KINEMATICS_ALT: 8 XXX
  SG_ BOH_3 : 19|4@0+ (1,0) [0|15] "" XXX
  SG_ BOH_2 : 23|2@0+ (1,0) [0|3] "" XXX
  SG_ LONG_ACCEL : 24|9@0- (-0.02,0) [-20|20] "m/s2" EON
- SG_ BOH_4 : 31|7@0- (1,0) [0|127] "" XXX
+ SG_ STEERING_BOH : 31|7@0- (1,0) [0|127] "" XXX
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
 
@@ -415,10 +415,38 @@ BO_ 927 RADAR_HUD: 8 ADAS
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" BDY
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" BDY
 
+BO_ 929 NEW_MSG_3A1: 8 XXX
+ SG_ BOH_1 : 0|1@0+ (1,0) [0|1] "" XXX
+ SG_ BOH_2 : 6|6@0+ (1,0) [0|255] "" XXX
+ SG_ BOH_3 : 15|2@0+ (1,0) [0|3] "" XXX
+ SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" XXX
+ SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" XXX
+
 BO_ 1027 NEW_MSG_403: 5 XXX
  SG_ DRIVE_GEAR_BOH : 17|1@0+ (1,0) [0|1] "" EON
  SG_ CHECKSUM : 35|4@0+ (1,0) [0|15] "" EON
  SG_ COUNTER : 37|2@0+ (1,0) [0|3] "" EON
+
+BO_ 1036 COUNTERS_40C: 8 XXX
+ SG_ COUNTER_1 : 7|8@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_2 : 15|8@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_3 : 23|8@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_4 : 31|8@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_5 : 39|8@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_6 : 47|8@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_7 : 55|8@0+ (1,0) [0|255] "" XXX
+ SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" XXX
+ SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" XXX
+
+BO_ 1039 COUNTERS_40F: 8 XXX
+ SG_ COUNTER_1 : 5|6@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_2 : 12|5@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_3 : 20|5@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_5 : 25|2@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_BIT_1 : 35|1@0+ (1,0) [0|255] "" XXX
+ SG_ COUNTER_BIT_2 : 40|1@0+ (1,0) [0|255] "" XXX
+ SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" XXX
+ SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" XXX
 
 BO_ 1108 NEW_MSG_454: 8 XXX
  SG_ BOH : 8|1@0+ (1,0) [0|1] "" XXX
