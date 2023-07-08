@@ -33,9 +33,9 @@ BO_ 401 GEARBOX: 8 PCM
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
 
-BO_ 428 NEW_MSG_1AC: 8 XXX
- SG_ STEER_BOH : 18|1@0+ (1,0) [0|1] "" XXX
- SG_ STEER_BOH_2 : 47|1@0+ (1,0) [0|1] "" XXX
+BO_ 428 STEERING_1AC: 8 XXX
+ SG_ JERK_STEER_BOH_1 : 18|1@0+ (1,0) [0|1] "" XXX
+ SG_ JERK_STEER_BOH_2 : 47|1@0+ (1,0) [0|1] "" XXX
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" XXX
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" XXX
 
@@ -46,6 +46,7 @@ BO_ 450 EPB_STATUS: 8 EPB
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
 
 BO_ 476 NEW_MSG_1DC: 7 XXX
+ SG_ VEHICLE_STATE : 6|1@0+ (1,0) [0|1] "" XXX
  SG_ GAS_PEDAL_BOH : 11|4@0+ (1,0) [0|15] "" XXX
  SG_ BOH : 23|8@0+ (1,0) [0|255] "" XXX
  SG_ CHECKSUM : 51|4@0+ (1,0) [0|15] "" XXX
@@ -58,7 +59,7 @@ BO_ 493 HUD_SETTING: 5 XXX
  SG_ COUNTER : 37|2@0+ (1,0) [0|3] "" EON
 
 BO_ 545 ECON_STATUS: 6 XXX
- SG_ BOH : 3|4@0+ (1,0) [0|15] "" XXX
+ SG_ BOH : 5|6@0+ (1,0) [0|31] "" XXX
  SG_ ECON_ON_2 : 37|2@0+ (1,0) [0|3] "" EON
  SG_ ECON_ON : 23|1@0+ (1,0) [0|1] "" EON
  SG_ CHECKSUM : 43|4@0+ (1,0) [0|3] "" EON
@@ -124,6 +125,7 @@ BO_ 1302 ODOMETER: 8 XXX
 
 CM_ SG_ 401 GEAR "10 = reverse, 11 = transition";
 CM_ SG_ 450 EPB_STATE "3 \"engaged\" 2 \"disengaging\" 1 \"engaging\" 0 \"disengaged\"";
+CM_ SG_ 476 VEHICLE_STATE "1 = acc mode, 0 vehicle on"
 CM_ SG_ 806 REVERSE_LIGHT "Might be reverse gear selected and not the lights";
 
 VAL_ 399 STEER_STATUS 6 "tmp_fault" 5 "fault_1" 4 "no_torque_alert_2" 3 "low_speed_lockout" 2 "no_torque_alert_1" 0 "normal" ;

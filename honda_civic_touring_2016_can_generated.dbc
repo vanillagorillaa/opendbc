@@ -24,8 +24,10 @@ BO_ 304 GAS_PEDAL_2: 8 PCM
  SG_ ENGINE_TORQUE_ESTIMATE : 7|16@0- (1,0) [-1000|1000] "Nm" EON
  SG_ ENGINE_TORQUE_REQUEST : 23|16@0- (1,0) [-1000|1000] "Nm" EON
  SG_ CAR_GAS : 39|8@0+ (1,0) [0|255] "" EON
+ SG_ BOH : 44|1@0+ (1,0) [0|1] "" XXX
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" EON
+ SG_ BOH_2 : 63|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 316 GAS_PEDAL: 8 PCM
  SG_ CAR_GAS : 39|8@0+ (1,0) [0|255] "" EON
@@ -202,6 +204,7 @@ BO_ 148 KINEMATICS_ALT: 8 XXX
  SG_ BOH_3 : 19|4@0+ (1,0) [0|15] "" XXX
  SG_ BOH_2 : 23|2@0+ (1,0) [0|3] "" XXX
  SG_ LONG_ACCEL : 24|9@0- (-0.02,0) [-20|20] "m/s2" EON
+ SG_ BOH_4 : 31|7@0- (1,0) [0|127] "" XXX
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
 
@@ -336,9 +339,9 @@ BO_ 401 GEARBOX: 8 PCM
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
 
-BO_ 428 NEW_MSG_1AC: 8 XXX
- SG_ STEER_BOH : 18|1@0+ (1,0) [0|1] "" XXX
- SG_ STEER_BOH_2 : 47|1@0+ (1,0) [0|1] "" XXX
+BO_ 428 STEERING_1AC: 8 XXX
+ SG_ JERK_STEER_BOH_1 : 18|1@0+ (1,0) [0|1] "" XXX
+ SG_ JERK_STEER_BOH_2 : 47|1@0+ (1,0) [0|1] "" XXX
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" XXX
  SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" XXX
 
@@ -349,6 +352,7 @@ BO_ 450 EPB_STATUS: 8 EPB
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
 
 BO_ 476 NEW_MSG_1DC: 7 XXX
+ SG_ VEHICLE_STATE : 6|1@0+ (1,0) [0|1] "" XXX
  SG_ GAS_PEDAL_BOH : 11|4@0+ (1,0) [0|15] "" XXX
  SG_ BOH : 23|8@0+ (1,0) [0|255] "" XXX
  SG_ CHECKSUM : 51|4@0+ (1,0) [0|15] "" XXX
@@ -361,7 +365,7 @@ BO_ 493 HUD_SETTING: 5 XXX
  SG_ COUNTER : 37|2@0+ (1,0) [0|3] "" EON
 
 BO_ 545 ECON_STATUS: 6 XXX
- SG_ BOH : 3|4@0+ (1,0) [0|15] "" XXX
+ SG_ BOH : 5|6@0+ (1,0) [0|31] "" XXX
  SG_ ECON_ON_2 : 37|2@0+ (1,0) [0|3] "" EON
  SG_ ECON_ON : 23|1@0+ (1,0) [0|1] "" EON
  SG_ CHECKSUM : 43|4@0+ (1,0) [0|3] "" EON
@@ -427,6 +431,7 @@ BO_ 1302 ODOMETER: 8 XXX
 
 CM_ SG_ 401 GEAR "10 = reverse, 11 = transition";
 CM_ SG_ 450 EPB_STATE "3 \"engaged\" 2 \"disengaging\" 1 \"engaging\" 0 \"disengaged\"";
+CM_ SG_ 476 VEHICLE_STATE "1 = acc mode, 0 vehicle on"
 CM_ SG_ 806 REVERSE_LIGHT "Might be reverse gear selected and not the lights";
 
 VAL_ 399 STEER_STATUS 6 "tmp_fault" 5 "fault_1" 4 "no_torque_alert_2" 3 "low_speed_lockout" 2 "no_torque_alert_1" 0 "normal" ;
