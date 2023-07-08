@@ -144,8 +144,8 @@ BO_ 804 CRUISE: 8 PCM
  SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" EON
 
 BO_ 884 STALK_STATUS: 8 XXX
- SG_ BOH : 4|5@0+ (1,0) [0|31] "" EON
- SG_ BOH_2 : 14|1@0+ (1,0) [0|1] "" EON
+ SG_ BRIGHTNESS_BOH : 6|7@0+ (1,0) [0|31] "" EON
+ SG_ SUNLIGHT_BOH : 14|1@0+ (1,0) [0|1] "" EON
  SG_ DASHBOARD_ALERT : 39|8@0+ (1,0) [0|255] "" EON
  SG_ AUTO_HEADLIGHTS : 46|1@0+ (1,0) [0|1] "" EON
  SG_ HIGH_BEAM_HOLD : 47|1@0+ (1,0) [0|1] "" EON
@@ -182,6 +182,7 @@ CM_ SG_ 780 CRUISE_SPEED "255 = no speed";
 CM_ SG_ 780 PCM_SPEED "Used by Nidec";
 CM_ SG_ 780 PCM_GAS "Used by Nidec";
 CM_ SG_ 804 CRUISE_SPEED_PCM "255 = no speed";
+CM_ SG_ 884 SUNLIGHT_BOH "1 when in garage, 0 when outdoors in sunlight"
 
 VAL_ 780 CRUISE_SPEED 255 "no_speed" 252 "stopped";
 VAL_ 780 HUD_LEAD 3 "acc_off" 2 "solid_car" 1 "dashed_car" 0 "no_car";
