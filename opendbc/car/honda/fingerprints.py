@@ -486,11 +486,13 @@ FW_VERSIONS = {
     (Ecu.vsa, 0x18da28f1, None): [
       b'57114-TDK-J120\x00\x00',
       b'57114-TDK-J330\x00\x00',
+      b'57114-TDN-J330\x00\x00'
     ],
     (Ecu.fwdRadar, 0x18dab0f1, None): [
       b'36161-TDK-J070\x00\x00',
       b'36161-TDK-J080\x00\x00',
       b'36161-TDK-J530\x00\x00',
+      b'36161-TDN-J530\x00\x00'
     ],
   },
   CAR.HONDA_ODYSSEY: {
