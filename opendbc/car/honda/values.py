@@ -222,6 +222,12 @@ class CAR(Platforms):
     radar_dbc_dict('honda_fit_ex_2018_can_generated'),
     flags=HondaFlags.NIDEC_ALT_SCM_MESSAGES,
   )
+    HONDA_FREED_HYBRID = HondaNidecPlatformConfig(
+      [HondaCarDocs("Honda Freed Hybrid 2020", min_steer_speed=12. * CV.MPH_TO_MS)],
+      CarSpecs(mass=3086. * CV.LB_TO_KG, wheelbase=2.74, steerRatio=13.06, centerToFrontRatio=0.39, tireStiffnessFactor=0.75),  # mostly copied from FIT
+      radar_dbc_dict('honda_fit_hybrid_2018_can_generated'),
+      flags=HondaFlags.NIDEC_ALT_SCM_MESSAGES,
+    )
   HONDA_HRV = HondaNidecPlatformConfig(
     [HondaCarDocs("Honda HR-V 2019-22", min_steer_speed=12. * CV.MPH_TO_MS)],
     HONDA_HRV_3G.specs,
@@ -308,10 +314,10 @@ FW_QUERY_CONFIG = FwQueryConfig(
   # Note that we still attempt to match with them when they are present
   # This is or'd with (ALL_ECUS - ESSENTIAL_ECUS) from fw_versions.py
   non_essential_ecus={
-    Ecu.eps: [CAR.ACURA_RDX_3G, CAR.HONDA_ACCORD, CAR.HONDA_CIVIC_2022, CAR.HONDA_E, CAR.HONDA_HRV_3G, CAR.HONDA_FREED],
+    Ecu.eps: [CAR.ACURA_RDX_3G, CAR.HONDA_ACCORD, CAR.HONDA_CIVIC_2022, CAR.HONDA_E, CAR.HONDA_HRV_3G, CAR.HONDA_FREED_HYBRID],
     Ecu.vsa: [CAR.ACURA_RDX_3G, CAR.HONDA_ACCORD, CAR.HONDA_CIVIC, CAR.HONDA_CIVIC_BOSCH, CAR.HONDA_CIVIC_2022, CAR.HONDA_CRV_5G, CAR.HONDA_CRV_HYBRID,
               CAR.HONDA_E, CAR.HONDA_HRV_3G, CAR.HONDA_INSIGHT],
-    Ecu.gateway: [CAR.HONDA_FREED],
+    Ecu.gateway: [CAR.HONDA_FREED_HYBRID],
   },
   extra_ecus=[
     (Ecu.combinationMeter, 0x18da60f1, None),
