@@ -491,7 +491,6 @@ FW_VERSIONS = {
       b'36161-TDK-J070\x00\x00',
       b'36161-TDK-J080\x00\x00',
       b'36161-TDK-J530\x00\x00',
-      b'36161-TDN-J530\x00\x00',
     ],
   },
   CAR.HONDA_FREED_HYBRID: {
