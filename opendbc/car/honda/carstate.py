@@ -33,17 +33,6 @@ def get_can_messages(CP, gearbox_msg):
     ("STEER_MOTOR_TORQUE", 0),  # TODO: not on every car
   ]
 
-  if CP.carFingerprint == CAR.HONDA_ODYSSEY_CHN:
-    messages += [
-      ("SCM_FEEDBACK", 25),
-      ("SCM_BUTTONS", 50),
-    ]
-  else:
-    messages += [
-      ("SCM_FEEDBACK", 10),
-      ("SCM_BUTTONS", 25),
-    ]
-
   if CP.carFingerprint in (CAR.HONDA_CRV_HYBRID, CAR.HONDA_CIVIC_BOSCH_DIESEL, CAR.ACURA_RDX_3G, CAR.HONDA_E):
     messages.append((gearbox_msg, 50))
   else:
@@ -68,12 +57,13 @@ def get_can_messages(CP, gearbox_msg):
     else:
       messages.append(("CRUISE_PARAMS", 50))
 
-  # TODO: clean this up
   if CP.carFingerprint in (CAR.HONDA_ACCORD, CAR.HONDA_CIVIC_BOSCH, CAR.HONDA_CIVIC_BOSCH_DIESEL, CAR.HONDA_CRV_HYBRID, CAR.HONDA_INSIGHT,
                            CAR.ACURA_RDX_3G, CAR.HONDA_E, CAR.HONDA_CIVIC_2022, CAR.HONDA_HRV_3G):
-    pass
-  elif CP.carFingerprint in (CAR.HONDA_ODYSSEY_CHN, CAR.HONDA_FREED, CAR.HONDA_HRV):
-    pass
+    messages.append(("SCM_FEEDBACK", 10))
+  elif CP.carFingerprint in (CAR.HONDA_FREED, CAR.HONDA_HRV):
+    messages.append(("SCM_BUTTONS", 25))
+  elif CP.carFingerprint == CAR.HONDA_ODYSSEY_CHN:
+    messages.append(("SCM_BUTTONS", 50))
   else:
     messages.append(("DOORS_STATUS", 3))
 
