@@ -4,7 +4,8 @@ from opendbc.car import get_safety_config, structs
 from opendbc.car.common.conversions import Conversions as CV
 from opendbc.car.honda.hondacan import CanBus
 from opendbc.car.honda.values import CarControllerParams, HondaFlags, CAR, HONDA_BOSCH, \
-                                                 HONDA_NIDEC_ALT_SCM_MESSAGES, HONDA_BOSCH_RADARLESS, HondaSafetyFlags
+                                                 HONDA_NIDEC_ALT_SCM_MESSAGES, HONDA_BOSCH_RADARLESS, \
+                                                 HONDA_CANFD_CAR, HondaSafetyFlags
 from opendbc.car.interfaces import CarInterfaceBase
 from opendbc.car.disable_ecu import disable_ecu
 
@@ -29,7 +30,16 @@ class CarInterface(CarInterfaceBase):
 
     CAN = CanBus(ret, fingerprint)
 
-    if candidate in HONDA_BOSCH:
+    if candidate in HONDA_CANFD_CAR:
+      cfgs = [get_safety_config(car.CarParams.SafetyModel.hondaBosch)]
+      if CAN.pt >= 4:
+        cfgs.insert(0, get_safety_config(car.CarParams.SafetyModel.noOutput))
+      ret.safetyConfigs = [get_safety_config(structs.CarParams.SafetyModel.hondaBosch)]
+      ret.radarUnavailable = True
+      # Disable the radar and let openpilot control longitudinal
+      # WARNING: THIS DISABLES AEB!
+      ret.openpilotLongitudinalControl = experimental_long
+    elif candidate in HONDA_BOSCH:
       ret.safetyConfigs = [get_safety_config(structs.CarParams.SafetyModel.hondaBosch)]
       ret.radarUnavailable = True
       # Disable the radar and let openpilot control longitudinal
@@ -95,7 +105,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 4096], [0, 4096]]  # TODO: determine if there is a dead zone at the top end
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.8], [0.24]]
 
-    elif candidate == CAR.HONDA_ACCORD:
+    elif candidate in (CAR.HONDA_ACCORD, CAR.HONDA_ACCORD_11G):
       ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 4096], [0, 4096]]  # TODO: determine if there is a dead zone at the top end
 
       if eps_modified:
@@ -194,7 +204,7 @@ class CarInterface(CarInterfaceBase):
     if ret.openpilotLongitudinalControl and candidate in HONDA_BOSCH:
       ret.safetyConfigs[0].safetyParam |= HondaSafetyFlags.FLAG_HONDA_BOSCH_LONG.value
 
-    if candidate in HONDA_BOSCH_RADARLESS:
+    if candidate in (HONDA_BOSCH_RADARLESS| HONDA_CANFD_CAR):
       ret.safetyConfigs[0].safetyParam |= HondaSafetyFlags.FLAG_HONDA_RADARLESS.value
 
     # min speed to enable ACC. if car can do stop and go, then set enabling speed
@@ -211,5 +221,5 @@ class CarInterface(CarInterfaceBase):
 
   @staticmethod
   def init(CP, can_recv, can_send):
-    if CP.carFingerprint in (HONDA_BOSCH - HONDA_BOSCH_RADARLESS) and CP.openpilotLongitudinalControl:
+    if CP.carFingerprint in (HONDA_BOSCH - HONDA_BOSCH_RADARLESS - HONDA_CANFD_CAR) and CP.openpilotLongitudinalControl:
       disable_ecu(can_recv, can_send, bus=CanBus(CP).pt, addr=0x18DAB0F1, com_cont_req=b'\x28\x83\x03')
