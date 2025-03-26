@@ -38,6 +38,7 @@ class CarInterface(CarInterfaceBase):
       ret.radarUnavailable = True
       # Disable the radar and let openpilot control longitudinal
       # WARNING: THIS DISABLES AEB!
+      ret.experimentalLongitudinalAvailable = True
       ret.openpilotLongitudinalControl = experimental_long
     elif candidate in HONDA_BOSCH:
       ret.safetyConfigs = [get_safety_config(structs.CarParams.SafetyModel.hondaBosch)]
@@ -222,4 +223,4 @@ class CarInterface(CarInterfaceBase):
   @staticmethod
   def init(CP, can_recv, can_send):
     if CP.carFingerprint in (HONDA_BOSCH - HONDA_BOSCH_RADARLESS - HONDA_CANFD_CAR) and CP.openpilotLongitudinalControl:
-      disable_ecu(can_recv, can_send, bus=CanBus(CP).pt, addr=0x18DAB0F1, com_cont_req=b'\x28\x83\x03')
+      disable_ecu(can_recv, can_send, bus=CanBus(CP).radar, addr=0x18DAB0F1, com_cont_req=b'\x28\x83\x03')
