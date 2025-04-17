@@ -403,7 +403,12 @@ static bool honda_nidec_fwd_hook(int bus_num, int addr) {
   if (bus_num == 2) {
     // forwarded if stock AEB is active
     bool is_brake_msg = addr == 0x1FA;
-    block_msg = is_brake_msg && !honda_fwd_brake;
+
+    // test blocking these two camera messages
+    bool is_cam_msg_1 = addr == 0x640;
+    bool is_cam_msg_2 = addr == 0x641;
+
+    block_msg = is_brake_msg && !honda_fwd_brake && is_cam_msg_1 && is_cam_msg_2;
   }
 
   return block_msg;
