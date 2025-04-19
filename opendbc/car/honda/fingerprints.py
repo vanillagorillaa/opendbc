@@ -138,6 +138,7 @@ FW_VERSIONS = {
       b'28101-5DJ-A510\x00\x00',
     ],
     (Ecu.vsa, 0x18da28f1, None): [
+      b'57114-TBA-A060\x00\x00',
       b'57114-TBA-A540\x00\x00',
       b'57114-TBA-A550\x00\x00',
       b'57114-TBA-A560\x00\x00',
