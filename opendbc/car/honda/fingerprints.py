@@ -935,4 +935,18 @@ FW_VERSIONS = {
       b'8S302-T90-A040\x00\x00',
     ],
   },
+  CAR.HONDA_CIVIC_NS: {
+    (Ecu.vsa, 0x18da28f1, None): [
+      b'57114-TBA-A060\x00\x00',
+    ],
+    (Ecu.eps, 0x18da30f1, None): [
+      b'39990-TBA-A030\x00\x00',
+    ],
+    (Ecu.srs, 0x18da53f1, None): [
+      b'77959-TBA-A030\x00\x00',
+    ],
+    (Ecu.transmission, 0x18da1ef1, None): [
+      b'28101-5DJ-A040\x00\x00',
+    ],
+  },
 }
