@@ -55,7 +55,7 @@ class CarInterface(CarInterfaceBase):
       ret.pcmCruise = not ret.openpilotLongitudinalControl
     else:
       if candidate == CAR.HONDA_CIVIC_NS:
-          ret.radarUnavailable = True
+        ret.radarUnavailable = True
       ret.safetyConfigs = [get_safety_config(structs.CarParams.SafetyModel.hondaNidec)]
       ret.openpilotLongitudinalControl = True
 
