@@ -29,9 +29,13 @@ def get_can_messages(CP, gearbox_msg):
     ("POWERTRAIN_DATA", 100),
     ("CAR_SPEED", 10),
     ("VSA_STATUS", 50),
-    ("STEER_STATUS", 100),
     ("STEER_MOTOR_TORQUE", 0),  # TODO: not on every car
   ]
+
+  if CP.carFingerprint not in (CAR.HONDA_CIVIC_NS,):
+    messages += [
+      ("STEER_STATUS", 100),
+    ]
 
   if CP.carFingerprint == CAR.HONDA_ODYSSEY_CHN:
     messages += [
@@ -62,11 +66,6 @@ def get_can_messages(CP, gearbox_msg):
         ("ACC_HUD", 10),
         ("ACC_CONTROL", 50),
       ]
-  else:  # Nidec signals
-    if CP.carFingerprint == CAR.HONDA_ODYSSEY_CHN:
-      messages.append(("CRUISE_PARAMS", 10))
-    else:
-      messages.append(("CRUISE_PARAMS", 50))
 
   if CP.carFingerprint not in (CAR.HONDA_ACCORD, CAR.HONDA_CIVIC_BOSCH, CAR.HONDA_CIVIC_BOSCH_DIESEL, CAR.HONDA_CRV_HYBRID, CAR.HONDA_INSIGHT,
                                CAR.ACURA_RDX_3G, CAR.HONDA_E, CAR.HONDA_ODYSSEY_CHN, CAR.HONDA_FREED, CAR.HONDA_HRV, *HONDA_BOSCH_RADARLESS,
