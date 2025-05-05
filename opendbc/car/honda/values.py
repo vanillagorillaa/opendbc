@@ -298,7 +298,7 @@ class CAR(Platforms):
     [],  # don't show in docs
     HONDA_CIVIC.specs,
     {Bus.pt: 'honda_civic_touring_2016_can_generated'},
-    flags=HondaFlags.NON_SENSING,
+    flags=HondaFlags.NON_SENSING | HondaFlags.NIDEC_ALT_SCM_MESSAGES,
   )
 
 
