@@ -93,7 +93,7 @@ class CarState(CarStateBase):
       self.gearbox_msg = "GEARBOX_ALT_2"
 
     self.main_on_sig_msg = "SCM_FEEDBACK"
-    if CP.carFingerprint in HONDA_NIDEC_ALT_SCM_MESSAGES:
+    if CP.carFingerprint in HONDA_NIDEC_ALT_SCM_MESSAGES and CP.carFingerprint != CAR.HONDA_CIVIC_NS:
       self.main_on_sig_msg = "SCM_BUTTONS"
 
     if CP.transmissionType != TransmissionType.manual:
