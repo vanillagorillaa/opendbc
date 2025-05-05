@@ -290,7 +290,7 @@ class CarState(CarStateBase):
     pt_messages = get_can_messages(CP, self.gearbox_msg)
 
     cam_messages = [
-      ("STEERING_CONTROL", 100),
+      ("STEERING_CONTROL", 0),
     ]
 
     if CP.carFingerprint in HONDA_BOSCH_RADARLESS:
@@ -301,9 +301,9 @@ class CarState(CarStateBase):
 
     elif CP.carFingerprint not in HONDA_BOSCH:
       cam_messages += [
-        ("ACC_HUD", 10),
-        ("LKAS_HUD", 10),
-        ("BRAKE_COMMAND", 50),
+        ("ACC_HUD", 0),
+        ("LKAS_HUD", 0),
+        ("BRAKE_COMMAND", 0),
       ]
 
     body_messages = [
