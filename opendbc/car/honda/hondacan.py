@@ -1,6 +1,6 @@
 from opendbc.car import CanBusBase
 from opendbc.car.common.conversions import Conversions as CV
-from opendbc.car.honda.values import HondaFlags, HONDA_BOSCH, HONDA_BOSCH_RADARLESS, HONDA_BOSCH_CANFD, CAR, CarControllerParams
+from opendbc.car.honda.values import HondaFlags, HONDA_BOSCH, HONDA_BOSCH_RADARLESS, HONDA_BOSCH_CANFD, HONDA_NON_SENSING, CAR, CarControllerParams
 
 # CAN bus layout with relay
 # 0 = ACC-CAN - radar side
@@ -112,10 +112,10 @@ def create_acc_commands(packer, CAN, enabled, active, accel, gas, stopping_count
       "SET_TO_75": 0x75,
       "SET_TO_30": 0x30,
     }
-    if car_fingerprint not in HONDA_NIDEC:
+    if car_fingerprint not in HONDA_NON_SENSING:
       commands.append(packer.make_can_msg("ACC_CONTROL_ON", CAN.pt, acc_control_on_values))
 
-  if car_fingerprint not in HONDA_NIDEC:
+  if car_fingerprint not in HONDA_NON_SENSING:
     commands.append(packer.make_can_msg("ACC_CONTROL", CAN.pt, acc_control_values))
   return commands
 
