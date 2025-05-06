@@ -63,12 +63,14 @@ class HondaFlags(IntFlag):
   # Static flags
   BOSCH = 4
   BOSCH_RADARLESS = 8
+  NON_SENSING = 16
 
   NIDEC = 16
   NIDEC_ALT_PCM_ACCEL = 32
   NIDEC_ALT_SCM_MESSAGES = 64
 
   BOSCH_CANFD = 128
+  NON_SENSING = 256
 
 # Car button codes
 class CruiseButtons:
@@ -295,6 +297,12 @@ class CAR(Platforms):
     CarSpecs(mass=1326, wheelbase=2.70, centerToFrontRatio=0.4, steerRatio=15.38),  # 10.93 is end-to-end spec
     radar_dbc_dict('honda_civic_touring_2016_can_generated'),
   )
+  HONDA_CIVIC_NS = HondaNidecPlatformConfig(
+    [],  # don't show in docs
+    HONDA_CIVIC.specs,
+    {Bus.pt: 'honda_civic_touring_2016_can_generated'},
+    flags=HondaFlags.NON_SENSING,
+  )
 
 
 HONDA_ALT_VERSION_REQUEST = bytes([uds.SERVICE_TYPE.READ_DATA_BY_IDENTIFIER]) + \
@@ -363,6 +371,7 @@ HONDA_NIDEC_ALT_SCM_MESSAGES = CAR.with_flags(HondaFlags.NIDEC_ALT_SCM_MESSAGES)
 HONDA_BOSCH = CAR.with_flags(HondaFlags.BOSCH)
 HONDA_BOSCH_RADARLESS = CAR.with_flags(HondaFlags.BOSCH_RADARLESS)
 HONDA_BOSCH_CANFD = CAR.with_flags(HondaFlags.BOSCH_CANFD)
+HONDA_NON_SENSING = CAR.with_flags(HondaFlags.NON_SENSING)
 
 
 DBC = CAR.create_dbc_map()
