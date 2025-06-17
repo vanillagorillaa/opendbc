@@ -4,8 +4,9 @@ from collections import namedtuple
 from opendbc.can.packer import CANPacker
 from opendbc.car import Bus, DT_CTRL, rate_limit, make_tester_present_msg, structs
 from opendbc.car.honda import hondacan
-from opendbc.car.honda.values import CruiseButtons, VISUAL_HUD, HONDA_BOSCH, HONDA_BOSCH_RADARLESS, HONDA_NIDEC_ALT_PCM_ACCEL, CarControllerParams
+from opendbc.car.honda.values import CruiseButtons, VISUAL_HUD, HONDA_BOSCH, HONDA_BOSCH_RADARLESS, HONDA_NIDEC_ALT_PCM_ACCEL, CarControllerParams, CAR
 from opendbc.car.interfaces import CarControllerBase
+from opendbc.car.common.conversions import Conversions as CV
 
 VisualAlert = structs.CarControl.HUDControl.VisualAlert
 LongCtrlState = structs.CarControl.Actuators.LongControlState
@@ -115,6 +116,8 @@ class CarController(CarControllerBase):
     self.gas = 0.0
     self.brake = 0.0
     self.last_torque = 0.0
+    
+    # Honda City vibration fix - comprehensive lateral control disable below 25 km/h
 
   def update(self, CC, CS, now_nanos):
     actuators = CC.actuators
@@ -133,7 +136,15 @@ class CarController(CarControllerBase):
     # *** rate limit steer ***
     limited_torque = rate_limit(actuators.torque, self.last_torque, -self.params.STEER_DELTA_DOWN * DT_CTRL,
                                 self.params.STEER_DELTA_UP * DT_CTRL)
-    self.last_torque = limited_torque
+    
+    # *** Honda City vibration fix - disable steering below 25 km/h ***
+    if self.CP.carFingerprint == CAR.HONDA_CITY and CS.out.vEgo * 3.6 < 25:
+      # Below 25 km/h - completely disable all steering control to prevent EPS conflicts
+      self.last_torque = 0.0
+      honda_city_low_speed = True
+    else:
+      self.last_torque = limited_torque
+      honda_city_low_speed = False
 
     # *** apply brake hysteresis ***
     pre_limit_brake, self.braking, self.brake_steady = actuator_hysteresis(brake, self.braking, self.brake_steady,
@@ -148,8 +159,12 @@ class CarController(CarControllerBase):
     # **** process the car messages ****
 
     # steer torque is converted back to CAN reference (positive when steering right)
-    apply_torque = int(np.interp(-limited_torque * self.params.STEER_MAX,
+    apply_torque = int(np.interp(-self.last_torque * self.params.STEER_MAX,
                                  self.params.STEER_LOOKUP_BP, self.params.STEER_LOOKUP_V))
+    
+    # *** Honda City safety check - ensure no torque below 25 km/h ***
+    if honda_city_low_speed:
+      apply_torque = 0  # Final safety backstop - absolutely no CAN torque below 25 km/h
 
     # Send CAN commands
     can_sends = []
@@ -159,8 +174,16 @@ class CarController(CarControllerBase):
       if self.frame % 10 == 0:
         can_sends.append(make_tester_present_msg(0x18DAB0F1, 1, suppress_response=True))
 
+    # *** Honda City - modify lateral control below 25 km/h ***
+    if honda_city_low_speed:
+      # Below 25 km/h - disable ALL lateral control (not just torque)
+      honda_lat_active = False
+      apply_torque = 0  # Ensure torque is also zero
+    else:
+      honda_lat_active = CC.latActive
+    
     # Send steering command.
-    can_sends.append(hondacan.create_steering_control(self.packer, self.CAN, apply_torque, CC.latActive))
+    can_sends.append(hondacan.create_steering_control(self.packer, self.CAN, apply_torque, honda_lat_active))
 
     # wind brake from air resistance decel at high speed
     wind_brake = np.interp(CS.out.vEgo, [0.0, 2.3, 35.0], [0.001, 0.002, 0.15])
@@ -230,7 +253,16 @@ class CarController(CarControllerBase):
     if self.frame % 10 == 0:
       hud = HUDData(int(pcm_accel), int(round(hud_v_cruise)), hud_control.leadVisible,
                     hud_control.lanesVisible, fcw_display, acc_alert, steer_required, hud_control.leadDistanceBars)
-      can_sends.extend(hondacan.create_ui_commands(self.packer, self.CAN, self.CP, CC.enabled, pcm_speed, hud, CS.is_metric, CS.acc_hud, CS.lkas_hud))
+      
+      # *** Honda City - disable UI commands below 25 km/h to prevent LKAS conflicts ***
+      if honda_city_low_speed:
+        # Below 25 km/h - disable UI commands that might trigger stock LKAS
+        # Keep only essential cruise info, disable steering-related HUD
+        hud_safe = HUDData(int(pcm_accel), int(round(hud_v_cruise)), hud_control.leadVisible,
+                          False, fcw_display, acc_alert, 0, hud_control.leadDistanceBars)  # lanesVisible=False, steer_required=0
+        can_sends.extend(hondacan.create_ui_commands(self.packer, self.CAN, self.CP, CC.enabled, pcm_speed, hud_safe, CS.is_metric, CS.acc_hud, CS.lkas_hud))
+      else:
+        can_sends.extend(hondacan.create_ui_commands(self.packer, self.CAN, self.CP, CC.enabled, pcm_speed, hud, CS.is_metric, CS.acc_hud, CS.lkas_hud))
 
       if self.CP.openpilotLongitudinalControl and self.CP.carFingerprint not in HONDA_BOSCH:
         self.speed = pcm_speed
