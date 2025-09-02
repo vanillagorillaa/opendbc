@@ -90,6 +90,8 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kiBP = [0., 5., 35.]
       ret.longitudinalTuning.kiV = [1.2, 0.8, 0.5]
 
+    eps_modified = False
+    eps_modified_3x = False
     for fw in car_fw:
       if fw.ecu == "eps" and b"-" not in fw.fwVersion and b"," in fw.fwVersion:
         eps_modified_3x = True
