@@ -90,10 +90,13 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kiBP = [0., 5., 35.]
       ret.longitudinalTuning.kiV = [1.2, 0.8, 0.5]
 
-    # Disable control if EPS mod detected
+    eps_modified = False
+    eps_modified_3x = False
     for fw in car_fw:
-      if fw.ecu == "eps" and b"," in fw.fwVersion:
-        ret.dashcamOnly = True
+      if fw.ecu == "eps" and b"-" not in fw.fwVersion and b"," in fw.fwVersion:
+        eps_modified_3x = True
+      elif fw.ecu == "eps" and b"-" in fw.fwVersion and b"," in fw.fwVersion:
+        eps_modified = True
 
     if candidate == CAR.HONDA_CIVIC:
       ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 2560], [0, 2560]]
@@ -189,6 +192,17 @@ class CarInterface(CarInterfaceBase):
         # When using stock ACC, the radar intercepts and filters steering commands the EPS would otherwise accept
         ret.minSteerSpeed = 70. * CV.KPH_TO_MS
 
+    elif candidate == CAR.HONDA_CLARITY:
+      if eps_modified: # 2X mod
+        ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 0xA00, 0x2800], [0, 2560, 3840]]
+        ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.3], [0.1]]
+      elif eps_modified_3x: # 3X mod
+        ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 0xA00, 0x3C00], [0, 2560, 3840]]
+        ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.1575], [0.05175]]
+      else:
+        ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 2560], [0, 2560]]
+        ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.8], [0.24]]
+
     else:
       ret.steerActuatorDelay = 0.15
       ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 2560], [0, 2560]]
@@ -212,7 +226,7 @@ class CarInterface(CarInterfaceBase):
     # min speed to enable ACC. if car can do stop and go, then set enabling speed
     # to a negative value, so it won't matter. Otherwise, add 0.5 mph margin to not
     # conflict with PCM acc
-    ret.autoResumeSng = candidate in (HONDA_BOSCH | {CAR.HONDA_CIVIC})
+    ret.autoResumeSng = candidate in (HONDA_BOSCH | {CAR.HONDA_CIVIC, CAR.HONDA_CLARITY})
     ret.minEnableSpeed = -1. if ret.autoResumeSng else 25.51 * CV.MPH_TO_MS
 
     ret.steerLimitTimer = 0.8
