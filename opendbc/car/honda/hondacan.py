@@ -55,7 +55,7 @@ def create_brake_command(packer, CAN, apply_brake, pcm_override, pcm_cancel_cmd,
 
   values = {
     "COMPUTER_BRAKE_HYBRID": apply_brake,
-    "BRAKE_PUMP_REQUEST_ALT": pump_on,
+    "BRAKE_PUMP_REQUEST_HYBRID": pump_on,
     "CRUISE_OVERRIDE": pcm_override,
     "CRUISE_FAULT_CMD": pcm_fault_cmd,
     "CRUISE_CANCEL_CMD": pcm_cancel_cmd,
